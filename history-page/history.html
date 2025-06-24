@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* General Resets and Base Styles (Mobile-First) */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #e0e7ff;
+        color: #333;
+        line-height: 1.6;
+        padding-bottom: 4.5rem; /* Space for fixed bottom nav */
+        min-height: 100vh; /* Ensure body takes full viewport height */
+        display: flex;
+        flex-direction: column;
+      }
+
+      .popup-QR {
+        width: 100%;
+        max-width: 400px;
+        margin: 30px auto; /* opsional, kalau kamu ingin ada ruang */
+        display: none;
+
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        z-index: 1000;
+        border: #333 1px solid;
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .popup-QR .popup-content {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .popup-QR img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .popup-content button {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      .popup-QR .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        background-color: #f2f4f8;
+        border-radius: 50%;
+        background-image: url("../image/close-icon.png");
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .container {
+        flex-grow: 1; /* Allow container to take available space */
+        width: 100%;
+        max-width: 780px; /* Max width for content on larger screens */
+        margin: 0 auto; /* Center the container */
+        padding: 1rem;
+        background-color: #f9fafb;
+      }
+
+      /* Header Section */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        margin-bottom: 1.5rem;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .back-icon {
+        font-size: 1.3rem;
+        color: #555;
+        cursor: pointer;
+      }
+
+      .header h1 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .more-options-icon {
+        font-size: 1.3rem;
+        color: #888;
+        cursor: pointer;
+      }
+
+      /* Search Bar */
+      .search-bar {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 2.8rem; /* Left padding for icon */
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        outline: none;
+        color: #333;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        transition: border-color 0.3s ease;
+      }
+
+      .search-bar input:focus {
+        border-color: #6c63ff;
+      }
+
+      .search-bar .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        font-size: 1.1rem;
+      }
+
+      /* Filters */
+      .filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .filter-dropdown {
+        position: relative;
+        flex: 1;
+        /* width: 50%; */ /* Removed fixed width, using flex:1 */
+      }
+
+      .filter-button {
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+        color: #555;
+        cursor: pointer;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .filter-button.active,
+      .filter-button:hover {
+        border-color: #6c63ff;
+        box-shadow: 0 2px 8px rgba(108, 99, 255, 0.1);
+      }
+
+      .filter-button i {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .filter-button.active i {
+        transform: rotate(180deg);
+      }
+
+      .dropdown-content {
+        position: absolute;
+        background-color: #fff;
+        min-width: 100%;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+        display: none; /* Hidden by default */
+      }
+
+      .dropdown-content.show {
+        display: block; /* Show when active */
+      }
+
+      .dropdown-content a {
+        color: #333;
+        padding: 0.8rem 1rem;
+        text-decoration: none;
+        display: block;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .dropdown-content a.selected {
+        background-color: #e6e6ff;
+        color: #6c63ff;
+        font-weight: 500;
+      }
+
+      /* Booking Sections */
+      .booking-section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.2rem;
+      }
+
+      .booking-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .booking-card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 1.2rem;
+        position: relative;
+        overflow: hidden;
+        border-left: 6px solid; /* Defined by specific status */
+      }
+
+      .booking-card.upcoming {
+        border-color: #4caf50; /* Green */
+      }
+      .booking-card.completed {
+        border-color: #6c63ff; /* Blue/Purple */
+      }
+      .booking-card.canceled {
+        border-color: #ff5c5c; /* Red */
+      }
+
+      .card-header-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.8rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .card-status-tag {
+        background-color: #e6ffe6; /* Light green */
+        color: #4caf50;
+        padding: 0.3rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      .card-status-tag.completed {
+        background-color: #e6e6ff;
+        color: #6c63ff;
+      }
+
+      .card-status-tag.canceled {
+        background-color: #ffe6e6;
+        color: #ff5c5c;
+      }
+
+      .card-datetime {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.8rem;
+      }
+
+      .card-category {
+        font-size: 0.9rem;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 1rem; /* Space before buttons */
+      }
+
+      .card-category i {
+        font-size: 1rem;
+        color: #888;
+      }
+
+      .card-actions {
+        display: flex;
+        flex-direction: column; /* Stack buttons on mobile */
+        gap: 0.8rem;
+      }
+
+      .action-button {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .show-qr-button {
+        background-color: #6c63ff;
+        color: #fff;
+        box-shadow: 0 3px 10px rgba(108, 99, 255, 0.2);
+      }
+
+      .show-qr-button:hover {
+        background-color: #5048e1;
+        transform: translateY(-2px);
+      }
+
+      .cancel-booking-button {
+        background-color: #f2f4f8;
+        color: #ff5c5c;
+        border: 1px solid #d4d8df;
+      }
+
+      .cancel-booking-button:hover {
+        background-color: #e6e8ec;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      /* No Bookings Message */
+      .no-bookings-message {
+        text-align: center;
+        color: #888;
+        font-size: 1rem;
+        margin-top: 3rem;
+      }
+
+      /* Bottom Navigation Bar */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        padding: 0.6rem 0;
+        border-top-left-radius: 15px; /* Slight curve */
+        border-top-right-radius: 15px;
+        z-index: 1000; /* Ensure it stays on top */
+        margin-top: auto; /* Push to bottom if container doesn't fill height */
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #888;
+        font-size: 0.75rem; /* 12px */
+        font-weight: 500;
+        padding: 0.3rem 0;
+        flex: 1; /* Distribute space evenly */
+      }
+
+      .nav-item i {
+        font-size: 1.375rem; /* 22px */
+        margin-bottom: 0.3rem;
+      }
+
+      .nav-item.active {
+        color: #6c63ff;
+      }
+
+      .nav-item:hover {
+        color: #6c63ff;
+      }
+
+      /* Desktop and Tablet Adjustments (Media Queries) */
+      @media (min-width: 600px) {
+        .container {
+          padding: 1.5rem;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+        }
+
+        .back-icon,
+        .more-options-icon {
+          font-size: 1.5rem;
+        }
+
+        .search-bar input {
+          padding: 1rem 1.2rem 1rem 3.2rem;
+          font-size: 1.05rem;
+        }
+        .search-bar .search-icon {
+          font-size: 1.2rem;
+        }
+
+        .filters {
+          gap: 1.5rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .filter-button {
+          padding: 1rem 1.2rem;
+          font-size: 1rem;
+        }
+
+        .dropdown-content {
+          margin-top: 0.6rem;
+        }
+
+        .dropdown-content a {
+          padding: 1rem 1.2rem;
+          font-size: 0.95rem;
+        }
+
+        .booking-section-title {
+          font-size: 1.3rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .booking-card {
+          padding: 1.5rem;
+        }
+
+        .card-title {
+          font-size: 1.2rem;
+        }
+
+        .card-status-tag {
+          font-size: 0.85rem;
+        }
+
+        .card-datetime,
+        .card-category {
+          font-size: 0.95rem;
+        }
+
+        .card-actions {
+          flex-direction: row; /* Buttons side-by-side on larger screens */
+          justify-content: flex-end; /* Push buttons to the right */
+          gap: 1rem;
+          margin-top: 1.2rem;
+        }
+
+        .action-button {
+          width: auto; /* Revert to auto width */
+          min-width: 140px; /* Give a minimum width */
+        }
+
+        .bottom-nav {
+          padding: 1rem 0;
+        }
+
+        .nav-item {
+          font-size: 0.875rem; /* 14px */
+        }
+
+        .nav-item i {
+          font-size: 1.5rem; /* 24px */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- pop up -->
+    <div class="popup-QR" id="popup">
+      <div class="popup-content">
+        <h2>QR Code</h2>
+        <p>Your booking QR code will be displayed here.</p>
+        <img src="../image/QR.png" alt="" />
+        <div class="close-popup"></div>
+      </div>
+    </div>
+
+    <!-- container -->
+    <div class="container">
+      <!-- Header Section -->
+      <header class="header">
+        <div class="header-left">
+          <i class="fas fa-arrow-left back-icon"></i>
+          <h1>Booking History</h1>
+        </div>
+        <div class="header-right">
+          <i class="fas fa-ellipsis-v more-options-icon"></i>
+        </div>
+      </header>
+
+      <!-- Search Bar -->
+      <section class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchBookings" placeholder="Search bookings" />
+      </section>
+
+      <!-- Filters -->
+      <section class="filters">
+        <div class="filter-dropdown" id="categoryFilter">
+          <button class="filter-button" data-filter-type="category">
+            <span id="selectedCategory">All Categories</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="#" data-value="all" class="selected">All Categories</a>
+            <a href="#" data-value="gym-session">Gym Session</a>
+            <a href="#" data-value="mixed-session">Mixed Session</a>
+            <a href="#" data-value="female-only">Female Only</a>
+            <a href="#" data-value="personal-training">Personal Training</a>
+          </div>
+        </div>
+
+        <div class="filter-dropdown" id="statusFilter">
+          <button class="filter-button" data-filter-type="status">
+            <span id="selectedStatus">All Status</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="#" data-value="all" class="selected">All Status</a>
+            <a href="#" data-value="upcoming">Upcoming</a>
+            <a href="#" data-value="completed">Completed</a>
+            <a href="#" data-value="canceled">Canceled</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Booking List Sections (Dynamically populated by JS) -->
+      <section id="upcomingBookingsSection">
+        <h2 class="booking-section-title">Upcoming Bookings</h2>
+        <div class="booking-list" id="upcomingBookingsList">
+          <!-- Upcoming booking cards will be injected here by JS -->
+        </div>
+        <p
+          class="no-bookings-message"
+          id="noUpcomingBookings"
+          style="display: none"
+        >
+          No upcoming bookings found.
+        </p>
+      </section>
+
+      <section id="pastBookingsSection">
+        <h2 class="booking-section-title">Past Bookings</h2>
+        <div class="booking-list" id="pastBookingsList">
+          <!-- Past booking cards will be injected here by JS -->
+        </div>
+        <p
+          class="no-bookings-message"
+          id="noPastBookings"
+          style="display: none"
+        >
+          No past bookings found.
+        </p>
+      </section>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="../home-page/home.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="../schedule-page/schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Schedule</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </a>
+      <a href="../profile-page/profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script>
+      // tombol back icon
+      const backIcon = document.querySelector(".back-icon");
+
+      backIcon.addEventListener("click", (event) => {
+        event.preventDefault(); // Mencegah perilaku default link
+        window.history.back(); // Kembali ke halaman sebelumnya
+      });
+      // close pop up
+      const popupQR = document.querySelector(".popup-QR");
+      const closePopup = document.querySelector(".popup-content .close-popup");
+
+      closePopup.addEventListener("click", (event) => {
+        event.preventDefault(); // Mencegah perilaku default link
+        popupQR.style.display = "none"; // Sembunyikan popup
+      });
+      // Dummy Booking Data
+      const allBookings = [
+        {
+          id: "b1",
+          title: "Gym Session",
+          datetime: "Tomorrow, 10:00 AM",
+          category: "Mixed Session",
+          status: "upcoming",
+        },
+        {
+          id: "b2",
+          title: "Gym Session",
+          datetime: "Tomorrow, 1:00 PM",
+          category: "Mixed Session",
+          status: "upcoming",
+        },
+        {
+          id: "b3",
+          title: "Gym Session",
+          datetime: "Apr 28, 2025 • 11:00 AM",
+          category: "Female Only",
+          status: "completed",
+        },
+        {
+          id: "b4",
+          title: "Gym Session",
+          datetime: "Apr 25, 2025 • 3:00 PM",
+          category: "Mixed Session",
+          status: "canceled",
+        },
+        {
+          id: "b5",
+          title: "Personal Training",
+          datetime: "May 10, 2025 • 9:00 AM",
+          category: "Personal Training",
+          status: "upcoming",
+        },
+        {
+          id: "b6",
+          title: "Gym Session",
+          datetime: "May 15, 2025 • 5:00 PM",
+          category: "Mixed Session",
+          status: "completed",
+        },
+      ];
+
+      let currentCategoryFilter = "all";
+      let currentStatusFilter = "all";
+      let currentSearchTerm = "";
+
+      const upcomingBookingsList = document.getElementById(
+        "upcomingBookingsList"
+      );
+      const pastBookingsList = document.getElementById("pastBookingsList");
+      const noUpcomingBookingsMsg =
+        document.getElementById("noUpcomingBookings");
+      const noPastBookingsMsg = document.getElementById("noPastBookings");
+      const searchInput = document.getElementById("searchBookings");
+
+      // Function to render booking cards
+      function renderBookings() {
+        upcomingBookingsList.innerHTML = "";
+        pastBookingsList.innerHTML = "";
+        noUpcomingBookingsMsg.style.display = "none";
+        noPastBookingsMsg.style.display = "none";
+
+        let filteredBookings = allBookings.filter((booking) => {
+          const matchesCategory =
+            currentCategoryFilter === "all" ||
+            booking.category
+              .toLowerCase()
+              .includes(currentCategoryFilter.toLowerCase());
+          const matchesStatus =
+            currentStatusFilter === "all" ||
+            booking.status === currentStatusFilter;
+          const matchesSearch =
+            booking.title
+              .toLowerCase()
+              .includes(currentSearchTerm.toLowerCase()) ||
+            booking.category
+              .toLowerCase()
+              .includes(currentSearchTerm.toLowerCase());
+          return matchesCategory && matchesStatus && matchesSearch;
+        });
+
+        const upcoming = filteredBookings.filter(
+          (b) => b.status === "upcoming"
+        );
+        const past = filteredBookings.filter(
+          (b) => b.status === "completed" || b.status === "canceled"
+        );
+
+        if (upcoming.length === 0) {
+          noUpcomingBookingsMsg.style.display = "block";
+        } else {
+          upcoming.forEach((booking) => {
+            upcomingBookingsList.innerHTML += createBookingCardHTML(
+              booking,
+              true
+            );
+          });
+        }
+
+        if (past.length === 0) {
+          noPastBookingsMsg.style.display = "block";
+        } else {
+          past.forEach((booking) => {
+            pastBookingsList.innerHTML += createBookingCardHTML(booking, false);
+          });
+        }
+      }
+
+      // Function to create HTML for a single booking card
+      function createBookingCardHTML(booking, isUpcoming) {
+        const statusClass = booking.status.toLowerCase().replace(" ", "-");
+        const actionButtonsHTML = isUpcoming
+          ? `
+                <div class="card-actions">
+                    <button class="action-button show-qr-button" data-booking-id="${booking.id}">Show QR</button>
+                    <button class="action-button cancel-booking-button" data-booking-id="${booking.id}">Cancel Booking</button>
+                </div>
+            `
+          : ""; // No buttons for past bookings
+
+        let categoryIcon = "";
+        if (booking.category.toLowerCase().includes("mixed")) {
+          categoryIcon = '<i class="fas fa-users"></i>';
+        } else if (booking.category.toLowerCase().includes("female")) {
+          categoryIcon = '<i class="fas fa-female"></i>';
+        } else if (booking.category.toLowerCase().includes("personal")) {
+          categoryIcon = '<i class="fas fa-user-tie"></i>';
+        } else {
+          // Default for Gym Session
+          categoryIcon = '<i class="fas fa-dumbbell"></i>';
+        }
+
+        return `
+                <div class="booking-card ${statusClass}" data-id="${
+          booking.id
+        }" data-category="${booking.category
+          .toLowerCase()
+          .replace(" ", "-")}" data-status="${booking.status}">
+                    <div class="card-header-main">
+                        <h3 class="card-title">${booking.title}</h3>
+                        <span class="card-status-tag ${statusClass}">${
+          booking.status
+        }</span>
+                    </div>
+                    <p class="card-datetime">${booking.datetime}</p>
+                    <p class="card-category">${categoryIcon} ${
+          booking.category
+        }</p>
+                    ${actionButtonsHTML}
+                </div>
+            `;
+      }
+
+      // --- Filter Dropdown Functionality ---
+      document.querySelectorAll(".filter-dropdown").forEach((dropdown) => {
+        const button = dropdown.querySelector(".filter-button");
+        const content = dropdown.querySelector(".dropdown-content");
+
+        // Toggle dropdown visibility
+        button.addEventListener("click", (event) => {
+          event.stopPropagation(); // Prevent document click from closing immediately
+          content.classList.toggle("show");
+          button.classList.toggle("active");
+          // Close other open dropdowns
+          document
+            .querySelectorAll(".dropdown-content.show")
+            .forEach((openDropdown) => {
+              if (openDropdown !== content) {
+                openDropdown.classList.remove("show");
+                openDropdown.previousElementSibling.classList.remove("active"); // The button
+              }
+            });
+        });
+
+        // Handle selection
+        content.addEventListener("click", (event) => {
+          if (event.target.tagName === "A") {
+            const selectedValue = event.target.dataset.value;
+            const filterType = button.dataset.filterType;
+            const selectedTextElement = button.querySelector("span");
+
+            // Update selected text on button
+            selectedTextElement.textContent = event.target.textContent;
+
+            // Remove 'selected' class from all and add to clicked
+            content
+              .querySelectorAll("a")
+              .forEach((a) => a.classList.remove("selected"));
+            event.target.classList.add("selected");
+
+            // Update filter variables
+            if (filterType === "category") {
+              currentCategoryFilter = selectedValue;
+            } else if (filterType === "status") {
+              currentStatusFilter = selectedValue;
+            }
+
+            content.classList.remove("show"); // Close dropdown
+            button.classList.remove("active"); // Deactivate button
+            renderBookings(); // Re-render with new filters
+          }
+        });
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener("click", (event) => {
+        document
+          .querySelectorAll(".dropdown-content.show")
+          .forEach((openDropdown) => {
+            openDropdown.classList.remove("show");
+            openDropdown.previousElementSibling.classList.remove("active");
+          });
+      });
+
+      // --- Search Functionality ---
+      searchInput.addEventListener("input", () => {
+        currentSearchTerm = searchInput.value.trim();
+        renderBookings();
+      });
+
+      // --- Booking Action Buttons (Show QR / Cancel Booking) ---
+      // Using event delegation since buttons are dynamically added
+      document.addEventListener("click", (event) => {
+        if (event.target.classList.contains("show-qr-button")) {
+          const bookingId = event.target.dataset.bookingId;
+          // alert(`Showing QR for booking: ${bookingId}`);
+          popupQR.style.display = "block"; // Sembunyikan popup
+          // In a real app, this would open a modal with the QR code.
+        } else if (event.target.classList.contains("cancel-booking-button")) {
+          const bookingId = event.target.dataset.bookingId;
+          const confirmCancel = confirm(
+            `Are you sure you want to cancel booking ${bookingId}?`
+          );
+          if (confirmCancel) {
+            alert(`Booking ${bookingId} has been canceled (simulated).`);
+            // In a real app, you would send a request to your backend to cancel the booking,
+            // then update the allBookings array and re-render.
+            // For now, we'll just remove it from the list after confirmation
+            const indexToRemove = allBookings.findIndex(
+              (b) => b.id === bookingId
+            );
+            if (indexToRemove !== -1) {
+              allBookings[indexToRemove].status = "canceled"; // Mark as canceled instead of removing
+              renderBookings(); // Re-render to reflect the change
+            }
+          }
+        }
+      });
+
+      // Initial render when the page loads
+      document.addEventListener("DOMContentLoaded", renderBookings);
+    </script>
+  </body>
+</html>

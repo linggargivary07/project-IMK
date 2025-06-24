@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* General Resets and Base Styles (Mobile-First) */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #e0e7ff;
+        color: #333;
+        line-height: 1.6;
+        padding-bottom: 4.5rem; /* Space for fixed bottom nav */
+        min-height: 100vh; /* Ensure body takes full viewport height */
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        flex-grow: 1; /* Allow container to take available space */
+        width: 100%;
+        max-width: 780px; /* Max width for content on larger screens to keep it contained */
+        margin: 0 auto; /* Center the container */
+        padding: 1rem;
+        background-color: #f9fafb;
+      }
+
+      /* Header Section */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        margin-bottom: 1.5rem;
+      }
+
+      .header h1 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .header p {
+        font-size: 0.9rem;
+        color: #888;
+      }
+
+      /* Profile Card */
+      .profile-card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .profile-picture-wrapper {
+        width: 8rem; /* 128px */
+        height: 8rem; /* 128px */
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 1.2rem auto;
+        border: 4px solid #f0f0f0; /* Subtle border around image */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .profile-picture {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .profile-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.2rem;
+      }
+
+      .student-id {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Stats Card */
+      .stats-card {
+        background-color: #e6ffe6; /* Light green */
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #4caf50; /* Green */
+      }
+
+      .stat-icon {
+        font-size: 2.2rem;
+        color: #4caf50; /* Green */
+      }
+
+      /* Info Fields */
+      .info-field {
+        margin-bottom: 1.2rem;
+        text-align: left; /* Align text to left */
+      }
+
+      .info-label {
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .info-value {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        color: #333;
+        width: 100%;
+        display: block; /* Ensure it takes full width */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-top: 2rem; /* Space from info fields */
+      }
+
+      .action-button {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.2s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-button i {
+        font-size: 1.1rem;
+      }
+
+      .edit-profile-button {
+        background-color: #007bff; /* Blue */
+        color: #fff;
+      }
+
+      .edit-profile-button:hover {
+        background-color: #0069d9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+      }
+
+      .settings-button,
+      .change-password-button {
+        background-color: #fff;
+        color: #666;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .settings-button:hover,
+      .change-password-button:hover {
+        background-color: #f5f5f5;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Bottom Navigation Bar */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        padding: 0.6rem 0;
+        border-top-left-radius: 15px; /* Slight curve */
+        border-top-right-radius: 15px;
+        z-index: 1000; /* Ensure it stays on top */
+        margin-top: auto; /* Push to bottom if container doesn't fill height */
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #888;
+        font-size: 0.75rem; /* 12px */
+        font-weight: 500;
+        padding: 0.3rem 0;
+        flex: 1; /* Distribute space evenly */
+      }
+
+      .nav-item i {
+        font-size: 1.375rem; /* 22px */
+        margin-bottom: 0.3rem;
+      }
+
+      .nav-item.active {
+        color: #6c63ff; /* Active color */
+      }
+
+      .nav-item:hover {
+        color: #6c63ff;
+      }
+
+      /* Desktop and Tablet Adjustments (Media Queries) */
+      @media (min-width: 600px) {
+        .container {
+          padding: 1.5rem;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+        }
+
+        .profile-card {
+          padding: 2rem;
+        }
+
+        .profile-picture-wrapper {
+          width: 9rem; /* 144px */
+          height: 9rem; /* 144px */
+        }
+
+        .profile-name {
+          font-size: 1.5rem;
+        }
+
+        .student-id {
+          font-size: 1rem;
+        }
+
+        .stats-card {
+          padding: 1.2rem 1.5rem;
+        }
+
+        .stat-value {
+          font-size: 2.2rem;
+        }
+
+        .stat-icon {
+          font-size: 2.5rem;
+        }
+
+        .info-label {
+          font-size: 1rem;
+        }
+
+        .info-value {
+          padding: 1rem 1.2rem;
+          font-size: 1.05rem;
+        }
+
+        .action-buttons {
+          gap: 1rem;
+        }
+
+        .action-button {
+          padding: 1rem 1.2rem;
+          font-size: 1.05rem;
+        }
+
+        .action-button i {
+          font-size: 1.2rem;
+        }
+
+        .bottom-nav {
+          padding: 1rem 0;
+        }
+
+        .nav-item {
+          font-size: 0.875rem; /* 14px */
+        }
+
+        .nav-item i {
+          font-size: 1.5rem; /* 24px */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="header">
+        <div>
+          <h1>My Profile</h1>
+          <p>Manage your account settings</p>
+        </div>
+        <!-- No icon on the right in the original design -->
+      </header>
+
+      <!-- Profile Card -->
+      <section class="profile-card">
+        <div class="profile-picture-wrapper">
+          <img
+            src="../image/character2.png"
+            alt="Profile Picture"
+            class="profile-picture"
+          />
+        </div>
+        <h2 class="profile-name">Kelompok Empat</h2>
+        <p class="student-id">Student ID: 2025114876</p>
+
+        <!-- Stats Card -->
+        <div class="stats-card">
+          <div>
+            <p class="stat-label">Total Gym Sessions</p>
+            <p class="stat-value">24</p>
+          </div>
+          <i class="fas fa-dumbbell stat-icon"></i>
+        </div>
+
+        <!-- Info Fields -->
+        <div class="info-field">
+          <label for="email" class="info-label">Email Address</label>
+          <span id="email" class="info-value"
+            >KelompokEmpat@student.umj.ac.id</span
+          >
+        </div>
+
+        <div class="info-field">
+          <label for="gender" class="info-label">Gender</label>
+          <span id="gender" class="info-value">Male</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="action-button edit-profile-button" id="editProfileBtn">
+            <i class="fas fa-pencil-alt"></i> Edit Profile Info
+          </button>
+          <button class="action-button settings-button" id="settingsBtn">
+            <i class="fas fa-cog"></i> Settings
+          </button>
+          <button
+            class="action-button change-password-button"
+            id="changePasswordBtn"
+          >
+            <i class="fas fa-lock"></i> Change Password
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="../home-page/home.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="../schedule-page/schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Schedule</span>
+      </a>
+      <a href="../history-page/history.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script>
+      // Get references to buttons
+      const editProfileBtn = document.getElementById("editProfileBtn");
+      const settingsBtn = document.getElementById("settingsBtn");
+      const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+      // Add event listeners for dummy functionality
+      editProfileBtn.addEventListener("click", () => {
+        alert("Edit Profile Info button clicked! (Simulated)");
+        // In a real application, this would redirect to an edit profile page or open a modal.
+      });
+
+      settingsBtn.addEventListener("click", () => {
+        alert("Settings button clicked! (Simulated)");
+        // In a real application, this would redirect to a settings page.
+      });
+
+      changePasswordBtn.addEventListener("click", () => {
+        alert("Change Password button clicked! (Simulated)");
+        // In a real application, this would open a change password modal or page.
+      });
+
+      // Placeholder for profile picture. In a real app, this would be dynamic.
+      // You can replace "https://placehold.co/128x128/add8e6/000000?text=Profile" with a real image URL.
+    </script>
+  </body>
+</html>

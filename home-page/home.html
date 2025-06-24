@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Gym - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* General Resets and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        color: #333;
+        line-height: 1.6;
+        padding-bottom: 70px; /* Space for fixed bottom nav */
+        background-color: #e0e7ff;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 780px; /* Max width for content on larger screens */
+        margin: 0 auto; /* Center the container */
+        padding: 1rem;
+        background-color: #f9fafb;
+        min-height: 100vh; /* Ensure body takes full viewport height */
+      }
+
+      /* Card Base Style */
+      .card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      /* Header Section */
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        margin-bottom: 20px;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .profile-pic {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #eee;
+      }
+
+      .greeting .hi-text {
+        font-size: 18px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 2px;
+      }
+
+      .greeting .prompt-text {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .notification-icon {
+        font-size: 24px;
+        color: #888;
+        cursor: pointer;
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .notification-icon:hover {
+        color: #6c63ff;
+      }
+
+      /* Gym Session Card */
+      .gym-session-card {
+        border-left: 6px solid #4caf50; /* Green border */
+        display: flex;
+        flex-direction: column; /* Stack content and button */
+        gap: 15px;
+      }
+
+      .gym-session-card .card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .gym-session-card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .gym-session-card .time-location {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .gym-session-card .status {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #4caf50; /* Green for approved status */
+        font-weight: 500;
+      }
+
+      .gym-session-card .status input[type="checkbox"] {
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+        accent-color: #4caf50; /* Checkbox color */
+      }
+
+      .gym-session-card .tag {
+        background-color: #e6ffe6; /* Light green */
+        color: #4caf50;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        align-self: flex-start; /* Align tag to top right */
+      }
+
+      .cancel-button {
+        background-color: #ff5c5c; /* Red color */
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%; /* Make button full width */
+      }
+
+      .cancel-button:hover {
+        background-color: #e04b4b;
+      }
+
+      /* Important Notice Card */
+      .important-notice-card {
+        background-color: #e6f7ff; /* Light blue background */
+        border-left: 6px solid #6c63ff; /* Blue border */
+      }
+
+      .important-notice-card .card-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .important-notice-card .info-icon {
+        font-size: 24px;
+        color: #6c63ff; /* Blue icon */
+      }
+
+      .important-notice-card h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .important-notice-card p {
+        font-size: 15px;
+        color: #555;
+      }
+
+      /* Navigation Cards Grid */
+      .navigation-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns */
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .nav-card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 20px 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nav-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 26px;
+        color: #fff;
+      }
+
+      .schedule-icon {
+        background-color: #6c63ff;
+      } /* Blue/Purple */
+      .bookings-icon {
+        background-color: #8a2be2;
+      } /* Blue Violet */
+      .profile-main-icon {
+        background-color: #ffa500;
+      } /* Orange */
+
+      .nav-card p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      /* Featured Article Section */
+      .featured-article-card {
+        padding-top: 15px; /* Adjust padding for title */
+      }
+
+      .featured-article-card .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        padding-left: 5px; /* Align with card padding */
+      }
+
+      .article-image {
+        width: 100%;
+        height: 200px; /* Fixed height for image */
+        object-fit: cover; /* Cover the area, cropping if necessary */
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      .article-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .article-summary {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      .read-more {
+        color: #6c63ff;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s ease;
+      }
+
+      .read-more:hover {
+        color: #5048e1;
+      }
+
+      /* Bottom Navigation Bar */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        border-top-left-radius: 15px; /* Slight curve */
+        border-top-right-radius: 15px;
+        z-index: 1000; /* Ensure it stays on top */
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #888;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 5px 0;
+        flex: 1; /* Distribute space evenly */
+      }
+
+      .nav-item i {
+        font-size: 22px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: #6c63ff;
+      }
+
+      .nav-item:hover {
+        color: #6c63ff;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+        }
+
+        .dashboard-header {
+          flex-direction: row; /* Keep header items in a row */
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .user-info {
+          gap: 10px;
+        }
+        .profile-pic {
+          width: 50px;
+          height: 50px;
+        }
+
+        .greeting .hi-text {
+          font-size: 16px;
+        }
+
+        .greeting .prompt-text {
+          font-size: 18px;
+        }
+
+        .notification-icon {
+          width: 35px;
+          height: 35px;
+          font-size: 20px;
+        }
+
+        .card {
+          padding: 18px;
+          margin-bottom: 15px;
+        }
+
+        .gym-session-card h3 {
+          font-size: 18px;
+        }
+
+        .gym-session-card .time-location {
+          font-size: 14px;
+        }
+
+        .cancel-button {
+          padding: 10px 15px;
+          font-size: 15px;
+        }
+
+        .important-notice-card h4 {
+          font-size: 16px;
+        }
+
+        .important-notice-card p {
+          font-size: 14px;
+        }
+
+        .navigation-cards-grid {
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(100px, 1fr)
+          ); /* Adjust columns based on space */
+          gap: 10px;
+        }
+
+        .nav-card {
+          padding: 15px 10px;
+          gap: 8px;
+        }
+
+        .nav-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 24px;
+        }
+
+        .nav-card p {
+          font-size: 13px;
+        }
+
+        .featured-article-card .section-title {
+          font-size: 18px;
+        }
+
+        .article-image {
+          height: 180px;
+        }
+
+        .article-title {
+          font-size: 16px;
+        }
+
+        .article-summary {
+          font-size: 14px;
+        }
+
+        .read-more {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding-bottom: 60px; /* Adjust for smaller bottom nav */
+        }
+        .container {
+          padding: 10px;
+        }
+
+        .profile-pic {
+          width: 60px;
+          height: 60px;
+        }
+
+        .greeting .hi-text {
+          font-size: 15px;
+        }
+
+        .greeting .prompt-text {
+          font-size: 17px;
+        }
+
+        .notification-icon {
+          width: 30px;
+          height: 30px;
+          font-size: 18px;
+        }
+
+        .card {
+          padding: 15px;
+          margin-bottom: 10px;
+        }
+
+        .gym-session-card .card-content {
+          flex-direction: column; /* Stack details and tag */
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .gym-session-card .tag {
+          margin-top: 5px; /* Add space when stacked */
+        }
+
+        .important-notice-card .card-content {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .important-notice-card .info-icon {
+          font-size: 20px;
+        }
+
+        .navigation-cards-grid {
+          grid-template-columns: repeat(
+            2,
+            1fr
+          ); /* 2 columns on very small screens */
+          gap: 10px;
+        }
+
+        .nav-icon {
+          width: 45px;
+          height: 45px;
+          font-size: 20px;
+        }
+        .nav-card p {
+          font-size: 12px;
+        }
+
+        .article-image {
+          height: 150px;
+        }
+
+        .bottom-nav {
+          padding: 8px 0;
+        }
+
+        .nav-item i {
+          font-size: 20px;
+          margin-bottom: 3px;
+        }
+        .nav-item span {
+          font-size: 11px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="dashboard-header">
+        <div class="user-info">
+          <img
+            src="../image/character2.png"
+            alt="User Profile Picture"
+            class="profile-pic"
+          />
+          <div class="greeting">
+            <p class="hi-text">Hi Kelompok Empat,</p>
+            <p class="prompt-text">Ready to move today?</p>
+          </div>
+        </div>
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+      </header>
+
+      <section class="card gym-session-card">
+        <div class="card-content">
+          <div class="session-details">
+            <h3>Gym Session</h3>
+            <p class="time-location">Tomorrow, 10:00 AM</p>
+            <div class="status">
+              <input type="checkbox" id="approved" checked disabled />
+              <label for="approved">disetujui</label>
+            </div>
+          </div>
+          <span class="tag upcoming">Upcoming</span>
+        </div>
+        <button class="cancel-button">Cancel Booking</button>
+      </section>
+
+      <section class="card important-notice-card">
+        <div class="card-content">
+          <i class="fas fa-info-circle info-icon"></i>
+          <div class="notice-text">
+            <h4>Important Notice</h4>
+            <p>
+              The gym will be closed for maintenance this Saturday from 2 PM to
+              4 PM.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="navigation-cards-grid">
+        <div class="nav-card">
+          <div class="nav-icon schedule-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <p>Schedule</p>
+        </div>
+        <div class="nav-card">
+          <div class="nav-icon bookings-icon">
+            <i class="fas fa-bookmark"></i>
+          </div>
+          <p>Bookings</p>
+        </div>
+        <div class="nav-card">
+          <div class="nav-icon profile-main-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <p>Profile</p>
+        </div>
+      </section>
+
+      <section class="card featured-article-card">
+        <h3 class="section-title">Featured Article</h3>
+        <img
+          src="../image/gym1.jpg"
+          alt="People exercising in a gym"
+          class="article-image"
+        />
+        <h4 class="article-title">
+          The Benefits of Regular Gym Exercise for Your Body
+        </h4>
+        <p class="article-summary">
+          Regular exercise at the gym can improve your physical health, boost
+          mental well-being, and enhance academic performance....
+        </p>
+        <a href="home-artikel.html" class="read-more"
+          >Read More <i class="fas fa-arrow-right"></i
+        ></a>
+      </section>
+      <section class="card featured-article-card">
+        <h3 class="section-title">Featured Article</h3>
+        <img
+          src="../image/gym2.jpg"
+          alt="People exercising in a gym"
+          class="article-image"
+        />
+        <h4 class="article-title">
+          The Benefits of Regular Gym Exercise for Your Body
+        </h4>
+        <p class="article-summary">
+          Regular exercise at the gym can improve your physical health, boost
+          mental well-being, and enhance academic performance....
+        </p>
+        <a href="home-artikel.html" class="read-more"
+          >Read More <i class="fas fa-arrow-right"></i
+        ></a>
+      </section>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="../schedule-page/schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Schedule</span>
+      </a>
+      <a href="../history-page/history.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </a>
+      <a href="../profile-page/profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+  </body>
+  <script>
+    const scheduleIcon = document.querySelector(".schedule-icon");
+    if (scheduleIcon) {
+      scheduleIcon.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = "../schedule-page/schedule.html";
+      });
+    }
+
+    const bookingsIcon = document.querySelector(".bookings-icon");
+    if (bookingsIcon) {
+      bookingsIcon.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = "../history-page/history.html";
+      });
+    }
+
+    const profileIcon = document.querySelector(".profile-main-icon");
+    if (profileIcon) {
+      profileIcon.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.href = "../profile-page/profile.html";
+      });
+    }
+  </script>
+  </script>
+</html>

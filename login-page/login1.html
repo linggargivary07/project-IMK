@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Campus Gym</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* General Resets and Base Styles (Mobile-First) */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(
+          to right,
+          #f8fafc,
+          #eff6ff 50%,
+          #e0e7ff 100%
+        ); /* Light gradient background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Full viewport height */
+        padding: 1.5rem; /* Add some padding for smaller screens */
+      }
+
+      .welcome-container {
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 420px; /* Max width for the container */
+        padding: 2.5rem 1.5rem; /* Padding inside the container */
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem; /* Space between logo/text and buttons */
+      }
+
+      /* Logo and Text Section */
+      .logo-text-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .logo-icon {
+        background: linear-gradient(
+          135deg,
+          #6c63ff,
+          #5048e1
+        ); /* Blue/Purple gradient for the logo background */
+        border-radius: 1.2rem; /* 15px */
+        width: 5rem; /* 80px */
+        height: 5rem; /* 80px */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .logo-icon i {
+        color: #ffffff;
+        font-size: 2.5rem; /* 40px */
+      }
+
+      .logo-text-section h1 {
+        font-size: 1.8rem; /* 28px */
+        color: #333333;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+
+      .access-portal-text {
+        font-size: 1rem; /* 16px */
+        color: #888888;
+        margin-top: -0.3rem; /* Adjust position */
+      }
+
+      /* Buttons Section */
+      .buttons-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem; /* Space between buttons */
+      }
+
+      .action-button {
+        width: 100%;
+        padding: 1rem 1.5rem; /* 16px 24px */
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem; /* 18px */
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          background-color 0.2s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        color: #fff; /* Default text color for buttons */
+      }
+
+      .login-button {
+        background-color: #6c63ff; /* Blue/Purple */
+      }
+
+      .login-button:hover {
+        background-color: #5048e1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+      }
+
+      .signup-button {
+        background-color: #4caf50; /* Green */
+      }
+
+      .signup-button:hover {
+        background-color: #3e8e41;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+      }
+
+      /* Help Text */
+      .help-text {
+        font-size: 0.9rem; /* 14px */
+        color: #666;
+        margin-top: 1.5rem; /* Space from buttons */
+      }
+
+      .help-text a {
+        color: #6c63ff; /* Blue/Purple link */
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
+
+      .help-text a:hover {
+        color: #5048e1;
+        text-decoration: underline;
+      }
+
+      /* Desktop and Tablet Adjustments (Media Queries) */
+      @media (min-width: 600px) {
+        .welcome-container {
+          padding: 3.5rem 2rem;
+          max-width: 480px; /* Slightly wider on tablets */
+        }
+
+        .logo-icon {
+          width: 6rem; /* 96px */
+          height: 6rem; /* 96px */
+        }
+
+        .logo-icon i {
+          font-size: 3rem; /* 48px */
+        }
+
+        .logo-text-section h1 {
+          font-size: 2.2rem; /* 35.2px */
+        }
+
+        .access-portal-text {
+          font-size: 1.1rem; /* 17.6px */
+        }
+
+        .buttons-section {
+          gap: 1.5rem;
+        }
+
+        .action-button {
+          padding: 1.2rem 2rem;
+          font-size: 1.2rem; /* 19.2px */
+        }
+
+        .help-text {
+          font-size: 1rem; /* 16px */
+        }
+      }
+
+      @media (min-width: 768px) {
+        .welcome-container {
+          max-width: 500px; /* Slightly wider on desktops */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="welcome-container">
+      <!-- Logo and Text Section -->
+      <section class="logo-text-section">
+        <div class="logo-icon">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <h1>Campus Gym</h1>
+        <p class="access-portal-text">Access Portal</p>
+      </section>
+
+      <!-- Buttons Section -->
+      <section class="buttons-section">
+        <button class="action-button login-button" id="loginBtn">Log in</button>
+        <button
+          class="action-button signup-button"
+          id="signupBtn"
+          href="login-register.html"
+        >
+          Sign in
+        </button>
+      </section>
+
+      <!-- Help Text -->
+      <p class="help-text">
+        Need help? Contact <a href="#" id="gymSupportLink">gym support</a>
+      </p>
+    </div>
+
+    <script>
+      // Get references to buttons and link
+      const loginBtn = document.getElementById("loginBtn");
+      const signupBtn = document.getElementById("signupBtn");
+      const gymSupportLink = document.getElementById("gymSupportLink");
+
+      // Add event listeners for dummy functionality
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "login2.html";
+        // In a real application, this would redirect to the login page or open a login modal.
+      });
+
+      signupBtn.addEventListener("click", () => {
+        window.location.href = "login-register.html";
+        // In a real application, this would redirect to the registration/sign-up page or open a modal.
+      });
+
+      gymSupportLink.addEventListener("click", (event) => {
+        event.preventDefault(); // Prevent default link behavior (page reload)
+        alert(
+          "Contact gym support link clicked! (Simulated - would open contact details or form)"
+        );
+        // In a real application, this would navigate to a support page or open a contact modal.
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    /* General Resets and Base Styles (Mobile-First) */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #e0e7ff;
+      color: #333;
+      line-height: 1.6;
+      padding-bottom: 4.5rem; /* Space for fixed bottom nav */
+      min-height: 100vh; /* Ensure body takes full viewport height */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex-grow: 1; /* Allow container to take available space */
+      width: 100%;
+      max-width: 480px; /* Max width for content on larger screens to keep it contained */
+      margin: 0 auto; /* Center the container */
+      padding: 2rem;
+      min-height: 100vh; /* Ensure body takes full viewport height */
+      background-color: #f9fafb;
+      color: 1F2937;
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .back-icon {
+      width: 40px;
+      cursor: pointer;
+    }
+
+    article img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    article h1 {
+      font-size: 1.8rem;
+      margin: 1rem 0;
+    }
+    article h6 {
+      font-size: 1.6rem;
+      color: #4b5563; /* Darker text for subheadings */
+      margin-bottom: 0.5rem;
+    }
+    article p {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #374151; /* Slightly darker text for better readability */
+    }
+    /* Desktop and Tablet Adjustments (Media Queries) */
+    @media (min-width: 600px) {
+      .container {
+        padding: 1.5rem;
+        max-width: 800px; /* Wider container for tablets/desktops */
+      }
+
+      .header {
+        margin-bottom: 2rem;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .back-icon,
+      .notification-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 2rem;
+      }
+    }
+  </style>
+  <body>
+    <div class="container">
+      <header class="header">
+        <img class="back-icon" src="../image/back-icon.png" alt="" />
+      </header>
+      <main>
+        <article>
+          <h1>Featured Article</h1>
+          <img src="../image/gym1.jpg" alt="" />
+          <h6>The Benefits of Regular Gym Exercise for</h6>
+          <h6>Your Body — Backed by Science</h6>
+          <br /><br /><br />
+          <p>
+            Engaging in regular gym exercise is not just about building muscle
+            or losing weight—it’s a scientifically proven way to enhance your
+            overall physical and mental health. Here's how your body benefits
+            from consistent workouts:
+          </p>
+          <p>1. Improved Heart Health</p>
+          <p>
+            Cardio exercises like treadmill runs, cycling, or rowing help
+            strengthen the heart muscle. According to the American Heart
+            Association, 30 minutes of moderate aerobic exercise five times a
+            week can significantly reduce the risk of cardiovascular disease,
+            high blood pressure, and stroke.
+          </p>
+          <p>2. Muscle Strength & Bone Density</p>
+          <p>
+            Weight training (resistance exercise) in the gym increases muscle
+            mass and maintains bone density. A 2019 study published in The
+            Journal of Bone and Mineral Research found that strength training
+            can prevent or even reverse bone loss, reducing the risk of
+            osteoporosis, especially in older adults.
+          </p>
+          <p>3. Better Metabolism & Weight Management</p>
+          <p>
+            Regular gym activity boosts your basal metabolic rate (BMR), helping
+            your body burn more calories even at rest. Strength training also
+            promotes lean muscle mass, which consumes more energy than fat
+            tissue.
+          </p>
+          <p>4. Enhanced Mental Health</p>
+          <p>
+            Olahraga secara teratur terbukti meningkatkan produksi
+            neurotransmiter seperti endorfin, dopamin, dan serotonin yang dapat
+            mengurangi stres, kecemasan, dan depresi. Sebuah studi tahun 2018
+            yang diterbitkan di The Lancet Psychiatry menemukan bahwa orang yang
+            berolahraga memiliki kesehatan mental yang lebih baik dibandingkan
+            mereka yang tidak aktif secara fisik.
+          </p>
+          <p>5. Improved Sleep Quality</p>
+          <p>
+            Aktivitas fisik membantu mengatur siklus tidur dan meningkatkan
+            kualitas tidur. Penelitian dari Sleep Medicine Reviews menunjukkan
+            bahwa olahraga moderat secara teratur dapat mempercepat waktu tidur,
+            memperpanjang durasi tidur nyenyak, dan mengurangi gejala insomnia.
+          </p>
+          <p>6. Boosted Immune Function</p>
+          <p>
+            Latihan moderat di gym dapat memperkuat sistem kekebalan tubuh
+            dengan meningkatkan sirkulasi sel darah putih dan memperbaiki respon
+            imun. Studi dari Journal of Sport and Health Science menunjukkan
+            bahwa olahraga teratur dapat menurunkan risiko infeksi saluran
+            pernapasan atas dan meningkatkan pertahanan tubuh terhadap penyakit.
+          </p>
+        </article>
+      </main>
+    </div>
+
+    <script>
+      const backIcon = document.querySelector(".back-icon");
+      backIcon.addEventListener("click", (event) => {
+        event.preventDefault(); // Mencegah perilaku default link
+        window.history.back(); // Kembali ke halaman sebelumnya
+      });
+    </script>
+  </body>
+</html>

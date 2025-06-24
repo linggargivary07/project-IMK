@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gym Schedule</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* General Resets and Base Styles (Mobile-First) */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #e0e7ff;
+        color: #333;
+        line-height: 1.6;
+        padding-bottom: 4.5rem; /* Space for fixed bottom nav */
+        min-height: 100vh; /* Ensure body takes full viewport height */
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        flex-grow: 1; /* Allow container to take available space */
+        width: 100%;
+        max-width: 480px; /* Max width for content on larger screens to keep it contained */
+        margin: 0 auto; /* Center the container */
+        padding: 1rem;
+        background-color: #f9fafb;
+      }
+
+      /* Header Section */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        margin-bottom: 1.5rem;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .back-icon {
+        font-size: 1.3rem;
+        color: #555;
+        cursor: pointer;
+      }
+
+      .header h1 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .notification-icon {
+        font-size: 1.3rem;
+        color: #888;
+        cursor: pointer;
+      }
+
+      /* Week Navigation */
+      .week-nav {
+        margin-bottom: 1.5rem;
+      }
+
+      .current-week-label {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 0.5rem;
+      }
+
+      .week-selector {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .week-date {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .arrow {
+        font-size: 1rem;
+        color: #6c63ff;
+        cursor: pointer;
+        padding: 0.3rem;
+      }
+
+      /* Legend */
+      .legend {
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+        gap: 1rem; /* Space between legend items */
+        margin-bottom: 1.5rem;
+        justify-content: center; /* Center legend items */
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .dot {
+        width: 0.8rem;
+        height: 0.8rem;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
+
+      .male-dot {
+        background-color: #6c63ff;
+      } /* Blue/Purple */
+      .female-dot {
+        background-color: #ff69b4;
+      } /* Hot Pink */
+      .unavailable-dot {
+        background-color: #ccc;
+      } /* Light Gray */
+
+      /* Schedule List Cards */
+      .schedule-list {
+        display: flex;
+        flex-direction: column; /* Stack cards vertically */
+        gap: 1rem; /* Space between cards */
+      }
+
+      .schedule-card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 1.2rem;
+        position: relative; /* For border-left */
+        overflow: hidden; /* Ensure rounded corners for border-left */
+      }
+
+      .male-day {
+        border-left: 6px solid #6c63ff;
+      } /* Blue/Purple border */
+      .female-day {
+        border-left: 6px solid #ff69b4;
+      } /* Hot Pink border */
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
+
+      .day-date {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .day-date .date {
+        font-weight: 400; /* Lighter weight for date part */
+        color: #555;
+      }
+
+      .gender-tag {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .male-tag {
+        background-color: #e6e6ff; /* Light blue */
+        color: #6c63ff;
+      }
+
+      .female-tag {
+        background-color: #ffe6f2; /* Light pink */
+        color: #ff69b4;
+      }
+
+      .gender-tag i {
+        font-size: 0.9rem;
+      }
+
+      .card-details {
+        display: flex;
+        flex-direction: column; /* Stack time and button on small screens */
+        gap: 0.8rem;
+        align-items: flex-start; /* Align items to start for stacking */
+      }
+
+      .time {
+        font-size: 1rem;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .booking-button,
+      .unavailable-button {
+        padding: 0.7rem 1.2rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        width: 100%; /* Full width on mobile */
+        max-width: 150px; /* Limit width on larger screens */
+      }
+
+      .booking-button {
+        background-color: #6c63ff;
+        color: #fff;
+        box-shadow: 0 3px 10px rgba(108, 99, 255, 0.2);
+      }
+
+      .booking-button:hover {
+        background-color: #5048e1;
+        transform: translateY(-2px);
+      }
+
+      .unavailable-button {
+        background-color: #e0e0e0;
+        color: #888;
+        cursor: not-allowed;
+      }
+
+      .unavailable-button:hover {
+        background-color: #d0d0d0;
+      }
+
+      .slots,
+      .note {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.5rem;
+      }
+
+      .slots {
+        color: #4caf50; /* Green for available slots */
+        font-weight: 500;
+      }
+
+      /* Bottom Navigation Bar */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        padding: 5px 0;
+        border-top-left-radius: 15px; /* Slight curve */
+        border-top-right-radius: 15px;
+        z-index: 1000; /* Ensure it stays on top */
+        margin-top: auto; /* Push to bottom if container doesn't fill height */
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #888;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 5px 0;
+        flex: 1; /* Distribute space evenly */
+      }
+
+      .nav-item i {
+        font-size: 22px; /* 22px for icons */
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: #6c63ff;
+      }
+
+      .nav-item:hover {
+        color: #6c63ff;
+      }
+
+      /* Desktop and Tablet Adjustments (Media Queries) */
+      @media (min-width: 600px) {
+        .container {
+          padding: 1.5rem;
+          max-width: 800px; /* Wider container for tablets/desktops */
+        }
+
+        .header {
+          margin-bottom: 2rem;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+        }
+
+        .back-icon,
+        .notification-icon {
+          font-size: 1.5rem;
+        }
+
+        .week-selector {
+          padding: 1rem 1.5rem;
+        }
+
+        .week-date {
+          font-size: 1.25rem;
+        }
+
+        .arrow {
+          font-size: 1.1rem;
+        }
+
+        .legend {
+          justify-content: flex-start; /* Align legend items to left on larger screens */
+          gap: 1.5rem;
+        }
+
+        .legend-item {
+          font-size: 1rem;
+        }
+
+        .dot {
+          width: 1rem;
+          height: 1rem;
+        }
+
+        .schedule-list {
+          display: grid; /* Use grid for a more structured layout on larger screens */
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(300px, 1fr)
+          ); /* Auto-fit columns, min width 300px */
+          gap: 1.5rem; /* Space between grid items */
+        }
+
+        .schedule-card {
+          padding: 1.5rem;
+        }
+
+        .day-date {
+          font-size: 1.2rem;
+        }
+
+        .gender-tag {
+          font-size: 0.85rem;
+        }
+
+        .card-details {
+          flex-direction: row; /* Layout time and button in a row */
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 0.8rem; /* Add some margin from header if needed */
+          gap: 1rem; /* Space between time and button */
+        }
+
+        .booking-button,
+        .unavailable-button {
+          width: auto; /* Revert to auto width */
+          min-width: 120px; /* Ensure a minimum width */
+        }
+
+        .slots,
+        .note {
+          margin-top: 0.8rem;
+        }
+
+        .bottom-nav {
+          padding: 1rem 0;
+        }
+
+        .nav-item {
+          font-size: 14px; /* 14px */
+        }
+
+        .nav-item i {
+          font-size: 24px; /* 24px */
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container {
+          padding: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-left">
+          <i class="fas fa-arrow-left back-icon"></i>
+          <h1>Gym Schedule</h1>
+        </div>
+        <div class="header-right">
+          <i class="fas fa-bell notification-icon"></i>
+        </div>
+      </header>
+
+      <section class="week-nav">
+        <p class="current-week-label">Current Week</p>
+        <div class="week-selector">
+          <i class="fas fa-chevron-left arrow prev-week"></i>
+          <span class="week-date" id="weekDate">Dec 16 - 22, 2024</span>
+          <i class="fas fa-chevron-right arrow next-week"></i>
+        </div>
+      </section>
+
+      <section class="legend">
+        <div class="legend-item">
+          <span class="dot male-dot"></span>
+          <span>Male Days</span>
+        </div>
+        <div class="legend-item">
+          <span class="dot female-dot"></span>
+          <span>Female Days</span>
+        </div>
+        <div class="legend-item">
+          <span class="dot unavailable-dot"></span>
+          <span>Unavailable</span>
+        </div>
+      </section>
+
+      <section class="schedule-list" id="scheduleList"></section>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="../home-page/home.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Schedule</span>
+      </a>
+      <a href="../history-page/history.html" class="nav-item">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </a>
+      <a href="../profile-page/profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script>
+      // Data Jadwal Dummy (Anda bisa mengambil ini dari API di aplikasi nyata)
+      const gymScheduleData = [
+        {
+          day: "Monday",
+          date: "Dec 16",
+          time: "6:00 AM - 10:00 PM",
+          gender: "male",
+          slots: 12,
+          status: "available",
+        },
+        {
+          day: "Tuesday",
+          date: "Dec 17",
+          time: "6:00 AM - 10:00 PM",
+          gender: "female",
+          status: "unavailable",
+          note: "Not available for male users",
+        },
+        {
+          day: "Wednesday",
+          date: "Dec 18",
+          time: "6:00 AM - 10:00 PM",
+          gender: "male",
+          slots: 3,
+          status: "available",
+        },
+        {
+          day: "Thursday",
+          date: "Dec 19",
+          time: "6:00 AM - 10:00 PM",
+          gender: "female",
+          status: "unavailable",
+          note: "Not available for male users",
+        },
+        {
+          day: "Friday",
+          date: "Dec 20",
+          time: "6:00 AM - 10:00 PM",
+          gender: "male",
+          slots: 8,
+          status: "available",
+        },
+        {
+          day: "Saturday",
+          date: "Dec 21",
+          time: "8:00 AM - 8:00 PM",
+          gender: "male",
+          slots: 5,
+          status: "available",
+        },
+        {
+          day: "Sunday",
+          date: "Dec 22",
+          time: "8:00 AM - 6:00 PM",
+          gender: "female",
+          slots: 10,
+          status: "available",
+        },
+      ];
+
+      const weekDateElement = document.getElementById("weekDate");
+      const prevWeekBtn = document.querySelector(".prev-week");
+      const nextWeekBtn = document.querySelector(".next-week");
+      const scheduleListElement = document.getElementById("scheduleList");
+      const backIcon = document.querySelector(".back-icon");
+
+      backIcon.addEventListener("click", (event) => {
+        event.preventDefault(); // Mencegah perilaku default link
+        window.history.back(); // Kembali ke halaman sebelumnya
+      });
+
+      // Gunakan tanggal saat ini sebagai referensi awal, atau tanggal yang Anda inginkan
+      let currentWeekStartDate = new Date(2024, 11, 16); // Contoh: 16 Desember 2024 (Bulan di JS 0-11)
+
+      // Fungsi untuk mendapatkan tanggal awal minggu (Senin) dari tanggal tertentu
+      function getStartOfWeek(date) {
+        const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Jika Minggu (0), kembali 6 hari. Jika tidak, kembali (dayOfWeek - 1) hari.
+        const startOfWeek = new Date(date);
+        startOfWeek.setDate(date.getDate() - diff);
+        startOfWeek.setHours(0, 0, 0, 0); // Reset waktu ke awal hari
+        return startOfWeek;
+      }
+
+      // Fungsi untuk memformat tanggal menjadi 'Dec 16'
+      function formatDate(date) {
+        const options = { month: "short", day: "numeric" };
+        return date.toLocaleDateString("en-US", options);
+      }
+
+      // Fungsi untuk memperbarui tampilan rentang tanggal minggu
+      function updateWeekDateDisplay() {
+        const startOfWeek = getStartOfWeek(currentWeekStartDate);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Tambah 6 hari untuk mendapatkan akhir minggu (Minggu)
+
+        const formattedStartDate = formatDate(startOfWeek);
+        const formattedEndDate = formatDate(endOfWeek);
+
+        weekDateElement.textContent = `${formattedStartDate} - ${formattedEndDate}`;
+
+        // Panggil fungsi untuk me-render jadwal setelah tanggal diupdate
+        renderScheduleCards(startOfWeek);
+      }
+
+      // Fungsi untuk me-render kartu jadwal berdasarkan tanggal awal minggu
+      function renderScheduleCards(startDate) {
+        scheduleListElement.innerHTML = ""; // Kosongkan daftar jadwal yang ada
+
+        const dayNames = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+
+        for (let i = 0; i < 7; i++) {
+          const currentDay = new Date(startDate);
+          currentDay.setDate(startDate.getDate() + i);
+
+          const dayOfWeekName = dayNames[currentDay.getDay()];
+          const dayOfMonth = currentDay.getDate();
+          const monthName = monthNames[currentDay.getMonth()];
+
+          // Cari data jadwal dummy untuk hari ini (berdasarkan tanggal, bukan hari nama)
+          // Di aplikasi nyata, Anda akan memfilter gymScheduleData berdasarkan tanggal aktual currentDay
+          // Untuk contoh ini, kita akan mengasumsikan gymScheduleData adalah untuk minggu awal yang ditampilkan
+          const dailySchedule = gymScheduleData[i] || {
+            // Fallback jika data tidak ada untuk hari tertentu
+            day: dayOfWeekName,
+            date: `${monthName} ${dayOfMonth}`,
+            time: "No schedule",
+            gender: "none",
+            status: "unavailable",
+            note: "No data for this day",
+          };
+
+          const isMaleDay = dailySchedule.gender === "male";
+          const isFemaleDay = dailySchedule.gender === "female";
+          const isAvailable = dailySchedule.status === "available";
+
+          const cardClass = isMaleDay
+            ? "male-day"
+            : isFemaleDay
+            ? "female-day"
+            : "";
+          const genderTagClass = isMaleDay
+            ? "male-tag"
+            : isFemaleDay
+            ? "female-tag"
+            : "";
+          const genderIcon = isMaleDay
+            ? "fa-male"
+            : isFemaleDay
+            ? "fa-female"
+            : "";
+          const buttonClass = isAvailable
+            ? "booking-button"
+            : "unavailable-button";
+          const buttonText = isAvailable ? "Booking" : "Unavailable";
+          const buttonDisabled = !isAvailable ? "disabled" : ""; // Tambahkan atribut disabled
+
+          const slotOrNote = dailySchedule.slots
+            ? `<p class="slots">Available slots: ${dailySchedule.slots}</p>`
+            : dailySchedule.note
+            ? `<p class="note">${dailySchedule.note}</p>`
+            : "";
+
+          const scheduleCardHTML = `
+                    <div class="schedule-card ${cardClass}">
+                        <div class="card-header">
+                            <h2 class="day-date">${dayOfWeekName} <span class="date">${monthName} ${dayOfMonth}</span></h2>
+                            ${
+                              dailySchedule.gender !== "none"
+                                ? `
+                                <div class="gender-tag ${genderTagClass}">
+                                    <i class="fas ${genderIcon}"></i> ${dailySchedule.gender.toUpperCase()}
+                                </div>
+                            `
+                                : ""
+                            }
+                        </div>
+                        <div class="card-details">
+                            <p class="time">${dailySchedule.time}</p>
+                            <button class="${buttonClass}" ${buttonDisabled}>${buttonText}</button>
+                        </div>
+                        ${slotOrNote}
+                    </div>
+                `;
+          scheduleListElement.insertAdjacentHTML("beforeend", scheduleCardHTML);
+        }
+      }
+
+      // Event Listeners
+      prevWeekBtn.addEventListener("click", () => {
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7); // Mundur 7 hari
+        updateWeekDateDisplay();
+      });
+
+      nextWeekBtn.addEventListener("click", () => {
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7); // Maju 7 hari
+        updateWeekDateDisplay();
+      });
+
+      // Inisialisasi tampilan saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", updateWeekDateDisplay);
+    </script>
+  </body>
+</html>
